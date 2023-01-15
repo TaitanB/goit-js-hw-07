@@ -3,40 +3,33 @@ import { galleryItems } from "./gallery-items.js";
 
 console.log(galleryItems);
 
+//
+
 const galleryImage = document.querySelector(".gallery");
 
 galleryImage.addEventListener("click", selectImage);
 
-const itemImage = galleryItems.map((item) => {
-  const itemEl = document.createElement("a");
-  itemEl.classList.add("gallery__item");
-  itemEl.href = item.original;
+const createImg = ({ preview, original, description }) => {
+  return `<a class="gallery__item" href="${original}">
+            <img
+              class="gallery__image"
+              src="${preview}" 
+              alt="${description}" 
+            />
+        </a>`;
+};
 
-  const imageEl = document.createElement("img");
-  imageEl.classList.add("gallery__image");
-  imageEl.src = item.preview;
-  imageEl.alt = item.description;
+const arrImg = galleryItems.map(createImg).join("");
 
-  itemEl.appendChild(imageEl);
-
-  //   console.log(itemEl);
-
-  return itemEl;
-});
-
-// console.log(itemImage);
-
-galleryImage.append(...itemImage);
+galleryImage.insertAdjacentHTML("beforeend", arrImg);
 
 function selectImage(item) {
-  item.preventDefault();
-
   if (item.target.nodeName !== "IMG") {
     return;
   }
-
-  const lightbox = new SimpleLightbox(".gallery a", {
-    captionsData: "alt",
-    captionDelay: 250,
-  });
 }
+
+const lightbox = new SimpleLightbox(".gallery a", {
+  captionsData: "alt",
+  captionDelay: 250,
+});
